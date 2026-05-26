@@ -1,0 +1,10 @@
+node_modules/
+coverage/
+lerna-debug.log
+/dist
+/dev
+.env
+.env.*
+frontend/.env
+frontend/.env.*
+.ralph-lsp/

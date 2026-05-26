@@ -1,0 +1,274 @@
+Contract CountdownBettingMarket(
+    game: CountdownGame,
+    mut carryOverPot: U256
+) {
+    mapping[ByteVec, U256] totalPoolByRound
+    mapping[ByteVec, U256] poolByRoundAndTarget
+    mapping[ByteVec, U256] userBetByRoundAndBettor
+    mapping[ByteVec, Address] userTargetByRoundAndBettor
+    mapping[ByteVec, Address] winnerByRound
+    mapping[ByteVec, U256] bettorCountByRound
+
+    event BetPlaced(roundId: U256, bettor: Address, target: Address, amount: U256)
+    event RoundFinalized(roundId: U256, winner: Address, totalPool: U256)
+    event Claimed(roundId: U256, bettor: Address, target: Address, payout: U256)
+    event CarryOverRolled(roundId: U256, amount: U256)
+
+    const MIN_BET = 1e17
+    const THIRTY_MINUTES_MS = 1800000
+
+    enum ErrorCodes {
+        BetTooSmall = 0
+        RoundMismatch = 1
+        RoundClosed = 2
+        BettingWindowClosed = 4
+        NotFinalized = 5
+        NoBet = 6
+        RoundNotSettled = 7
+        AlreadyFinalized = 8
+        InvalidPoolState = 9
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn placeBet(roundId: U256, target: Address, amount: U256) -> () {
+        let (roundActive, currentRoundId, deadlineMs, _) = game.getRoundSnapshot()
+        let now = blockTimeStamp!()
+        assert!(roundActive, ErrorCodes.RoundClosed)
+        assert!(currentRoundId == roundId, ErrorCodes.RoundMismatch)
+        assert!(now < deadlineMs, ErrorCodes.RoundClosed)
+        assert!(now + THIRTY_MINUTES_MS < deadlineMs, ErrorCodes.BettingWindowClosed)
+
+        let bettor = callerAddress!()
+        let roundKey = encodeToByteVec!(roundId)
+        let userKey = encodeToByteVec!(roundId, bettor)
+
+        // If previous rounds had no correct predictions, roll over the carry pot
+        // into the first prediction that opens this round's pool.
+        if (!totalPoolByRound.contains!(roundKey) && carryOverPot > 0) {
+            let rolledAmount = carryOverPot
+            totalPoolByRound.insert!(bettor, roundKey, rolledAmount)
+            carryOverPot = 0
+            emit CarryOverRolled(roundId, rolledAmount)
+        }
+
+        let hasBet = userBetByRoundAndBettor.contains!(userKey)
+        let oldTarget = if (hasBet) userTargetByRoundAndBettor[userKey] else target
+        let oldAmount = if (hasBet) userBetByRoundAndBettor[userKey] else 0
+
+        assert!(hasBet || amount > 0, ErrorCodes.NoBet)
+        if (amount > 0) {
+            assert!(amount >= MIN_BET, ErrorCodes.BetTooSmall)
+        }
+
+        if (amount > oldAmount) {
+            transferTokenToSelf!(bettor, ALPH, amount - oldAmount)
+        } else if (oldAmount > amount) {
+            transferTokenFromSelf!(bettor, ALPH, oldAmount - amount)
+        } else {}
+
+        if (oldAmount > 0) {
+            assert!(totalPoolByRound.contains!(roundKey), ErrorCodes.InvalidPoolState)
+            let currentRoundPool = totalPoolByRound[roundKey]
+            assert!(currentRoundPool >= oldAmount, ErrorCodes.InvalidPoolState)
+            let nextRoundPool = currentRoundPool - oldAmount
+            if (nextRoundPool == 0) {
+                totalPoolByRound.remove!(bettor, roundKey)
+            } else {
+                totalPoolByRound[roundKey] = nextRoundPool
+            }
+
+            let oldTargetKey = encodeToByteVec!(roundId, oldTarget)
+            assert!(poolByRoundAndTarget.contains!(oldTargetKey), ErrorCodes.InvalidPoolState)
+            let currentTargetPool = poolByRoundAndTarget[oldTargetKey]
+            assert!(currentTargetPool >= oldAmount, ErrorCodes.InvalidPoolState)
+            let nextTargetPool = currentTargetPool - oldAmount
+            if (nextTargetPool == 0) {
+                poolByRoundAndTarget.remove!(bettor, oldTargetKey)
+            } else {
+                poolByRoundAndTarget[oldTargetKey] = nextTargetPool
+            }
+        }
+
+        if (amount > 0) {
+            if (totalPoolByRound.contains!(roundKey)) {
+                totalPoolByRound[roundKey] = totalPoolByRound[roundKey] + amount
+            } else {
+                totalPoolByRound.insert!(bettor, roundKey, amount)
+            }
+
+            let targetKey = encodeToByteVec!(roundId, target)
+            if (poolByRoundAndTarget.contains!(targetKey)) {
+                poolByRoundAndTarget[targetKey] = poolByRoundAndTarget[targetKey] + amount
+            } else {
+                poolByRoundAndTarget.insert!(bettor, targetKey, amount)
+            }
+
+            if (hasBet) {
+                userBetByRoundAndBettor[userKey] = amount
+                userTargetByRoundAndBettor[userKey] = target
+            } else {
+                userBetByRoundAndBettor.insert!(bettor, userKey, amount)
+                userTargetByRoundAndBettor.insert!(bettor, userKey, target)
+                // New bettor in this round: increment count
+                if (bettorCountByRound.contains!(roundKey)) {
+                    bettorCountByRound[roundKey] = bettorCountByRound[roundKey] + 1
+                } else {
+                    bettorCountByRound.insert!(bettor, roundKey, 1)
+                }
+            }
+        } else {
+            userBetByRoundAndBettor.remove!(bettor, userKey)
+            userTargetByRoundAndBettor.remove!(bettor, userKey)
+            // Bettor fully withdrew: decrement count
+            assert!(bettorCountByRound.contains!(roundKey), ErrorCodes.InvalidPoolState)
+            let count = bettorCountByRound[roundKey]
+            if (count <= 1) {
+                bettorCountByRound.remove!(bettor, roundKey)
+            } else {
+                bettorCountByRound[roundKey] = count - 1
+            }
+        }
+
+        emit BetPlaced(roundId, bettor, target, amount)
+    }
+
+    @using(preapprovedAssets = true, updateFields = true, checkExternalCaller = false)
+    pub fn finalizeRound(roundId: U256) -> () {
+        let roundKey = encodeToByteVec!(roundId)
+        assert!(!winnerByRound.contains!(roundKey), ErrorCodes.AlreadyFinalized)
+
+        let (settled, winner) = game.getSettledWinner(roundId)
+        assert!(settled, ErrorCodes.RoundNotSettled)
+
+        let totalPool = if (totalPoolByRound.contains!(roundKey)) totalPoolByRound[roundKey] else 0
+        let winnerKey = encodeToByteVec!(roundId, winner)
+        let winnerPool = if (poolByRoundAndTarget.contains!(winnerKey)) poolByRoundAndTarget[winnerKey] else 0
+        if (totalPool > 0 && winnerPool == 0) {
+            carryOverPot = carryOverPot + totalPool
+        }
+
+        winnerByRound.insert!(callerAddress!(), roundKey, winner)
+
+        emit RoundFinalized(roundId, winner, totalPool)
+    }
+
+    @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn claim(roundId: U256) -> () {
+        let roundKey = encodeToByteVec!(roundId)
+        assert!(winnerByRound.contains!(roundKey), ErrorCodes.NotFinalized)
+
+        let bettor = callerAddress!()
+        let userKey = encodeToByteVec!(roundId, bettor)
+        assert!(userBetByRoundAndBettor.contains!(userKey), ErrorCodes.NoBet)
+
+        let winner = winnerByRound[roundKey]
+        let target = userTargetByRoundAndBettor[userKey]
+        let betAmount = userBetByRoundAndBettor[userKey]
+        let targetKey = encodeToByteVec!(roundId, target)
+
+        let payout = if (target == winner) {
+            let totalPool = if (totalPoolByRound.contains!(roundKey)) totalPoolByRound[roundKey] else 0
+            let winnerPool = if (poolByRoundAndTarget.contains!(targetKey)) poolByRoundAndTarget[targetKey] else 0
+            if (winnerPool == 0) {
+                0
+            } else {
+                betAmount * totalPool / winnerPool
+            }
+        } else {
+            0
+        }
+
+        userBetByRoundAndBettor.remove!(bettor, userKey)
+        userTargetByRoundAndBettor.remove!(bettor, userKey)
+
+        // Clean up this bettor's contribution to the target pool
+        if (poolByRoundAndTarget.contains!(targetKey)) {
+            let currentTargetPool = poolByRoundAndTarget[targetKey]
+            if (currentTargetPool <= betAmount) {
+                poolByRoundAndTarget.remove!(bettor, targetKey)
+            } else {
+                poolByRoundAndTarget[targetKey] = currentTargetPool - betAmount
+            }
+        }
+
+        // Decrement bettor count; last claimer cleans up remaining round-level entries
+        assert!(bettorCountByRound.contains!(roundKey), ErrorCodes.InvalidPoolState)
+        let count = bettorCountByRound[roundKey]
+        if (count <= 1) {
+            bettorCountByRound.remove!(bettor, roundKey)
+            if (totalPoolByRound.contains!(roundKey)) {
+                totalPoolByRound.remove!(bettor, roundKey)
+            }
+            winnerByRound.remove!(bettor, roundKey)
+        } else {
+            bettorCountByRound[roundKey] = count - 1
+        }
+
+        if (payout > 0) {
+            transferTokenFromSelf!(bettor, ALPH, payout)
+        }
+
+        emit Claimed(roundId, bettor, target, payout)
+    }
+
+    pub fn getRoundPools(roundId: U256, target: Address) -> (U256, U256) {
+        let roundKey = encodeToByteVec!(roundId)
+        let targetKey = encodeToByteVec!(roundId, target)
+        let (roundActive, currentRoundId, _, _) = game.getRoundSnapshot()
+        let hasRoundPool = totalPoolByRound.contains!(roundKey)
+        let roundPool = if (hasRoundPool) {
+            totalPoolByRound[roundKey]
+        } else if (carryOverPot > 0 && roundActive && currentRoundId == roundId) {
+            carryOverPot
+        } else {
+            0
+        }
+        let targetPool = if (poolByRoundAndTarget.contains!(targetKey)) poolByRoundAndTarget[targetKey] else 0
+        return roundPool, targetPool
+    }
+
+    pub fn getUserBet(roundId: U256, bettor: Address) -> (Bool, Address, U256) {
+        let userKey = encodeToByteVec!(roundId, bettor)
+        if (userBetByRoundAndBettor.contains!(userKey)) {
+            return true, userTargetByRoundAndBettor[userKey], userBetByRoundAndBettor[userKey]
+        } else {
+            return false, bettor, 0
+        }
+    }
+
+    pub fn quotePayout(roundId: U256, target: Address, amount: U256) -> U256 {
+        let roundKey = encodeToByteVec!(roundId)
+        let targetKey = encodeToByteVec!(roundId, target)
+        let (roundActive, currentRoundId, _, _) = game.getRoundSnapshot()
+        let hasRoundPool = totalPoolByRound.contains!(roundKey)
+        let roundPool = if (hasRoundPool) {
+            totalPoolByRound[roundKey]
+        } else if (carryOverPot > 0 && roundActive && currentRoundId == roundId) {
+            carryOverPot
+        } else {
+            0
+        }
+        let targetPool = if (poolByRoundAndTarget.contains!(targetKey)) poolByRoundAndTarget[targetKey] else 0
+        let nextRoundPool = roundPool + amount
+        let nextTargetPool = targetPool + amount
+        if (nextTargetPool == 0) {
+            return 0
+        } else {
+            return amount * nextRoundPool / nextTargetPool
+        }
+    }
+
+    // Calculate payout for an existing bet (doesn't add amount to pools)
+    pub fn getClaimablePayout(roundId: U256, target: Address, betAmount: U256) -> U256 {
+        let roundKey = encodeToByteVec!(roundId)
+        let targetKey = encodeToByteVec!(roundId, target)
+        let totalPool = if (totalPoolByRound.contains!(roundKey)) totalPoolByRound[roundKey] else 0
+        let targetPool = if (poolByRoundAndTarget.contains!(targetKey)) poolByRoundAndTarget[targetKey] else 0
+        if (targetPool == 0) {
+            return 0
+        } else {
+            return betAmount * totalPool / targetPool
+        }
+    }
+
+}
