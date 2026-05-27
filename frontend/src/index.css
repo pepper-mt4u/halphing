@@ -1,347 +1,310 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Space+Mono:wght@400;700&display=swap');
 
 @import "tailwindcss";
 
-* {
-  box-sizing: border-box;
+/* ── TOKENS ───────────────────────────────────── */
+:root {
+  --bg:         #030108;
+  --surface:    #0c0816;
+  --panel:      #120e20;
+  --border:     rgba(255, 255, 255, 0.88);
+  --border-dim: rgba(255, 255, 255, 0.14);
+  --crimson:    #cc2000;
+  --crt-red:    #ff3200;
+  --gold:       #c8960c;
+  --gold-lit:   #f0c030;
+  --text:       #e8e0d0;
+  --text-dim:   rgba(232, 224, 208, 0.45);
 }
+
+/* ── BASE ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
   min-width: 320px;
-  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
-  background-color: #050505;
-  color: #E0E0E0;
-}
-
-#root {
   min-height: 100vh;
-}
-
-.font-cinzel {
-  font-family: 'Cinzel', serif;
-}
-
-/* ─── Stone Background ─────────────────────────────────────────────────────── */
-
-.stone-bg {
-  background-color: #050505;
+  background-color: var(--bg);
   background-image:
     repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 47px,
-      rgba(255, 72, 0, 0.025) 48px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 95px,
-      rgba(255, 72, 0, 0.015) 96px
-    ),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.10'/%3E%3C/svg%3E");
-  background-size: 100% 48px, 96px 100%, 256px 256px;
-  min-height: 100vh;
+      45deg,
+      rgba(255, 255, 255, 0.006) 0px,
+      rgba(255, 255, 255, 0.006) 1px,
+      transparent 1px,
+      transparent 10px
+    );
+  color: var(--text);
+  font-family: 'VT323', monospace;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: none;
+  overflow-x: hidden;
 }
 
-/* ─── Tectonic Plate (Main Card) ───────────────────────────────────────────── */
+#root { min-height: 100vh; }
 
-.tectonic-plate {
-  background-color: #1A1C1E;
-  border-top: 1px solid rgba(224, 224, 224, 0.07);
-  border-left: 1px solid rgba(224, 224, 224, 0.07);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
-  border-right: 1px solid rgba(0, 0, 0, 0.6);
-  clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 0 100%);
-  filter: drop-shadow(16px 16px 32px rgba(0, 0, 0, 0.85));
+/* CRT scanline overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.1) 3px,
+    rgba(0, 0, 0, 0.1) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
 }
 
-/* ─── Tectonic Sub-Panel ───────────────────────────────────────────────────── */
+/* ── FONT HELPERS ─────────────────────────────── */
+.font-pixel { font-family: 'Press Start 2P', monospace; }
+.font-vt    { font-family: 'VT323', monospace; }
+.font-mono  { font-family: 'Space Mono', monospace; }
 
-.tectonic-panel {
-  background-color: #2D3033;
-  border-top: 1px solid rgba(224, 224, 224, 0.05);
-  border-left: 1px solid rgba(224, 224, 224, 0.05);
-  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+/* ── TEXT EFFECTS ─────────────────────────────── */
+.crt-red {
+  color: var(--crt-red);
+  text-shadow: 0 0 8px var(--crimson), 0 0 18px rgba(204, 32, 0, 0.45);
+}
+.crt-gold {
+  color: var(--gold-lit);
+  text-shadow: 0 0 8px rgba(200, 150, 12, 0.55);
+}
+.crt-white {
+  color: var(--text);
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.35);
 }
 
-/* ─── Fault Line Divider ───────────────────────────────────────────────────── */
+/* ── STRUCTURAL COMPONENTS ────────────────────── */
+.pixel-box {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  box-shadow: 5px 5px 0 #000;
+}
 
-.fault-line {
-  height: 1px;
-  border: none;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(224, 224, 224, 0.06) 15%,
-    rgba(255, 72, 0, 0.3) 50%,
-    rgba(224, 224, 224, 0.06) 85%,
-    transparent 100%
+.pixel-panel {
+  background: var(--panel);
+  border: 2px solid var(--border-dim);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+}
+
+.pixel-panel-gold {
+  background: var(--panel);
+  border: 2px solid rgba(200, 150, 12, 0.38);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+}
+
+.pixel-panel-red {
+  background: var(--panel);
+  border: 2px solid rgba(204, 32, 0, 0.38);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* ── PIXEL DIVIDER ────────────────────────────── */
+.pixel-divider {
+  height: 3px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--border-dim) 0px,
+    var(--border-dim) 5px,
+    transparent 5px,
+    transparent 10px
   );
 }
 
-/* ─── Typography Effects ───────────────────────────────────────────────────── */
-
-.engraved {
-  text-shadow:
-    1px 1px 0px rgba(255, 255, 255, 0.07),
-    -1px -1px 0px rgba(0, 0, 0, 0.65);
+.pixel-divider-red {
+  height: 3px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(204, 32, 0, 0.55) 0px,
+    rgba(204, 32, 0, 0.55) 5px,
+    transparent 5px,
+    transparent 10px
+  );
 }
 
-.text-magma-glow {
-  color: #EFEFEF;
-  text-shadow:
-    1px 1px 0px rgba(255, 255, 255, 0.07),
-    -1px -1px 0px rgba(0, 0, 0, 0.65),
-    0 0 40px rgba(255, 72, 0, 0.45),
-    0 0 90px rgba(255, 72, 0, 0.2);
-}
-
-/* ─── Magma Button ─────────────────────────────────────────────────────────── */
-
-.btn-magma {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: #050505;
-  border: 2px solid #FF4800;
-  color: #E0E0E0;
-  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-  transition: all 600ms cubic-bezier(0.22, 1, 0.36, 1);
-  cursor: pointer;
-  font-family: 'Cinzel', serif;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+/* ── TABS ─────────────────────────────────────── */
+.pixel-tab {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.44rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-size: 0.7rem;
-  padding: 0.85rem 1.75rem;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 2px solid var(--border-dim);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.65);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 80ms, border-color 80ms;
+}
+.pixel-tab:hover:not(.pixel-tab-active) {
+  border-color: rgba(255, 255, 255, 0.38);
+  color: rgba(232, 224, 208, 0.75);
+}
+.pixel-tab-active {
+  border-color: var(--crt-red);
+  color: var(--text);
+  box-shadow: 3px 3px 0 #000, 0 0 14px rgba(255, 50, 0, 0.35);
+}
+
+/* ── INPUTS ───────────────────────────────────── */
+.pixel-input {
   width: 100%;
-}
-
-.btn-magma:hover:not(:disabled) {
-  box-shadow: inset 0 0 24px rgba(255, 72, 0, 0.35), 0 0 16px rgba(255, 72, 0, 0.12);
-  color: #FF6B2B;
-  border-color: #FF6B2B;
-}
-
-.btn-magma:active:not(:disabled) {
-  background: rgba(255, 72, 0, 0.1);
-}
-
-.btn-magma:disabled {
-  opacity: 0.28;
-  cursor: not-allowed;
-  border-color: rgba(255, 72, 0, 0.22);
-}
-
-/* ─── Gold Button ──────────────────────────────────────────────────────────── */
-
-.btn-gold {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: transparent;
-  border: 1px solid #D4AF37;
-  color: #D4AF37;
-  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-  transition: all 600ms cubic-bezier(0.22, 1, 0.36, 1);
-  cursor: pointer;
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-size: 0.68rem;
-  padding: 0.7rem 1.5rem;
-  width: 100%;
-}
-
-.btn-gold:hover:not(:disabled) {
-  background: rgba(212, 175, 55, 0.06);
-  box-shadow: inset 0 0 16px rgba(212, 175, 55, 0.18);
-}
-
-.btn-gold:disabled {
-  opacity: 0.28;
-  cursor: not-allowed;
-}
-
-/* ─── Stone Button ─────────────────────────────────────────────────────────── */
-
-.btn-stone {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: 1px solid rgba(224, 224, 224, 0.16);
-  color: rgba(224, 224, 224, 0.5);
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
-  transition: all 350ms cubic-bezier(0.22, 1, 0.36, 1);
-  cursor: pointer;
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-size: 0.62rem;
-  padding: 0.45rem 1rem;
-}
-
-.btn-stone:hover:not(:disabled) {
-  border-color: rgba(224, 224, 224, 0.32);
-  color: rgba(224, 224, 224, 0.82);
-}
-
-.btn-stone:disabled {
-  opacity: 0.22;
-  cursor: not-allowed;
-}
-
-/* ─── Small Variants ───────────────────────────────────────────────────────── */
-
-.btn-stone-sm {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: 1px solid rgba(224, 224, 224, 0.14);
-  color: rgba(224, 224, 224, 0.42);
-  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
-  transition: all 280ms;
-  cursor: pointer;
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-size: 0.57rem;
-  padding: 0.32rem 0.7rem;
-}
-
-.btn-stone-sm:hover:not(:disabled) {
-  border-color: rgba(224, 224, 224, 0.28);
-  color: rgba(224, 224, 224, 0.72);
-}
-
-.btn-stone-sm:disabled {
-  opacity: 0.18;
-  cursor: not-allowed;
-}
-
-.btn-gold-sm {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: 1px solid rgba(212, 175, 55, 0.45);
-  color: rgba(212, 175, 55, 0.75);
-  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
-  transition: all 280ms;
-  cursor: pointer;
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-size: 0.57rem;
-  padding: 0.32rem 0.7rem;
-}
-
-.btn-gold-sm:hover:not(:disabled) {
-  background: rgba(212, 175, 55, 0.07);
-  border-color: #D4AF37;
-  color: #D4AF37;
-}
-
-.btn-gold-sm:disabled {
-  opacity: 0.18;
-  cursor: not-allowed;
-}
-
-/* ─── Navigation Tabs ──────────────────────────────────────────────────────── */
-
-.stone-tab {
-  background: transparent;
-  border: 1px solid rgba(224, 224, 224, 0.1);
-  color: rgba(224, 224, 224, 0.36);
-  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%);
-  transition: all 350ms cubic-bezier(0.22, 1, 0.36, 1);
-  cursor: pointer;
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-size: 0.62rem;
-  padding: 0.5rem 1.25rem;
-}
-
-.stone-tab:hover {
-  border-color: rgba(224, 224, 224, 0.22);
-  color: rgba(224, 224, 224, 0.62);
-}
-
-.stone-tab-active {
-  background: rgba(255, 72, 0, 0.07);
-  border-color: rgba(255, 72, 0, 0.45);
-  color: #FF4800;
-}
-
-/* ─── Inputs ───────────────────────────────────────────────────────────────── */
-
-.stone-input {
-  background: rgba(5, 5, 5, 0.7);
-  border-top: 1px solid rgba(0, 0, 0, 0.6);
-  border-left: 1px solid rgba(0, 0, 0, 0.6);
-  border-bottom: 1px solid rgba(224, 224, 224, 0.1);
-  border-right: 1px solid rgba(224, 224, 224, 0.1);
-  color: #E0E0E0;
-  font-family: 'Space Grotesk', sans-serif;
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
-  transition: border-color 300ms;
+  background: var(--panel);
+  border: 2px solid var(--border-dim);
+  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.55);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  padding: 10px 12px;
   outline: none;
+  transition: border-color 120ms;
+}
+.pixel-input::placeholder { color: var(--text-dim); }
+.pixel-input:focus        { border-color: rgba(255, 255, 255, 0.45); }
+.pixel-input:disabled     { opacity: 0.3; cursor: not-allowed; }
+
+/* ── BUTTONS ──────────────────────────────────── */
+.btn-pixel-red {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
   width: 100%;
-  padding: 0.6rem 0.85rem;
-  font-size: 0.8rem;
+  background: var(--crimson);
+  border: 3px solid #fff;
+  box-shadow: 5px 5px 0 #000;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  text-align: center;
+  line-height: 1.8;
+  cursor: pointer;
+  transition: transform 80ms, box-shadow 80ms, background 80ms;
 }
+.btn-pixel-red:not(:disabled):hover  { background: #de2600; }
+.btn-pixel-red:not(:disabled):active { transform: translate(5px, 5px); box-shadow: none; }
+.btn-pixel-red:disabled               { opacity: 0.28; cursor: not-allowed; }
 
-.stone-input:focus {
-  border-bottom-color: rgba(255, 72, 0, 0.45);
-  border-right-color: rgba(255, 72, 0, 0.45);
+.btn-pixel-gold {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+  background: var(--gold);
+  border: 3px solid #fff;
+  box-shadow: 5px 5px 0 #000;
+  color: #0a0600;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  text-align: center;
+  line-height: 1.8;
+  cursor: pointer;
+  transition: transform 80ms, box-shadow 80ms, background 80ms;
 }
+.btn-pixel-gold:not(:disabled):hover  { background: #d89a0e; }
+.btn-pixel-gold:not(:disabled):active { transform: translate(5px, 5px); box-shadow: none; }
+.btn-pixel-gold:disabled               { opacity: 0.28; cursor: not-allowed; }
 
-.stone-input::placeholder {
-  color: rgba(224, 224, 224, 0.18);
+.btn-pixel-ghost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+  background: transparent;
+  border: 2px solid var(--border-dim);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.65);
+  color: var(--text-dim);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.46rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 11px 18px;
+  text-align: center;
+  line-height: 1.8;
+  cursor: pointer;
+  transition: transform 80ms, box-shadow 80ms, border-color 80ms, color 80ms;
 }
+.btn-pixel-ghost:not(:disabled):hover  { border-color: rgba(255,255,255,0.4); color: var(--text); }
+.btn-pixel-ghost:not(:disabled):active { transform: translate(3px, 3px); box-shadow: none; }
+.btn-pixel-ghost:disabled               { opacity: 0.22; cursor: not-allowed; }
 
-.stone-input:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
+.btn-pixel-ghost-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 2px solid var(--border-dim);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+  color: var(--text-dim);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: transform 60ms, box-shadow 60ms, border-color 80ms, color 80ms;
 }
+.btn-pixel-ghost-sm:not(:disabled):hover  { border-color: rgba(255,255,255,0.38); color: var(--text); }
+.btn-pixel-ghost-sm:not(:disabled):active { transform: translate(2px, 2px); box-shadow: none; }
+.btn-pixel-ghost-sm:disabled               { opacity: 0.22; cursor: not-allowed; }
 
-/* ─── Animations ───────────────────────────────────────────────────────────── */
-
-@keyframes magma-pulse {
-  0%, 100% { box-shadow: 0 0 6px rgba(255, 72, 0, 0.22); }
-  50%       { box-shadow: 0 0 20px rgba(255, 72, 0, 0.55), 0 0 40px rgba(255, 72, 0, 0.18); }
+.btn-pixel-gold-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold);
+  border: 2px solid #fff;
+  box-shadow: 2px 2px 0 #000;
+  color: #0a0600;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: transform 60ms, box-shadow 60ms, background 80ms;
 }
+.btn-pixel-gold-sm:not(:disabled):hover  { background: #d89a0e; }
+.btn-pixel-gold-sm:not(:disabled):active { transform: translate(2px, 2px); box-shadow: none; }
+.btn-pixel-gold-sm:disabled               { opacity: 0.22; cursor: not-allowed; }
 
-.magma-pulse {
-  animation: magma-pulse 2.5s ease-in-out infinite;
+/* ── ANIMATIONS ───────────────────────────────── */
+@keyframes pixel-enter {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+.pixel-enter { animation: pixel-enter 0.25s ease-out forwards; }
 
-@keyframes tectonic-drop {
-  0%   { transform: translateY(-10px); opacity: 0; }
-  65%  { transform: translateY(2px); }
-  100% { transform: translateY(0); opacity: 1; }
+@keyframes crt-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
+.blink { animation: crt-blink 1s step-end infinite; }
 
-.tectonic-enter {
-  animation: tectonic-drop 550ms cubic-bezier(0.22, 1, 0.36, 1) both;
+@keyframes pixel-pulse {
+  0%,  100% { box-shadow: 5px 5px 0 #000; }
+  50%        { box-shadow: 5px 5px 0 #000, 0 0 22px rgba(255, 50, 0, 0.5), 0 0 44px rgba(255, 50, 0, 0.22); }
 }
+.pixel-pulse { animation: pixel-pulse 2.2s ease-in-out infinite; }
 
-@keyframes ember-breathe {
-  0%, 100% { opacity: 0.55; }
-  50%       { opacity: 1; }
+@keyframes pixel-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
-
-.ember-breathe {
-  animation: ember-breathe 3s ease-in-out infinite;
-}
+.pixel-spin { animation: pixel-spin 0.7s linear infinite; }

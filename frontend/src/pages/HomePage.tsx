@@ -1,5 +1,3 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import { Zap } from 'lucide-react'
 import type { CountdownGameTypes } from '../../../artifacts/ts/CountdownGame'
 import { attoToAlph, formatAddressWithYou } from '../lib/utils'
 import type { TimerPart } from '../types'
@@ -35,7 +33,6 @@ export function HomePage({
   isLoading,
   currentLeader,
   walletAddress,
-  state,
   timerParts,
   halvedCount,
   pot,
@@ -60,127 +57,104 @@ export function HomePage({
   const timerActive = isRoundActive && !isExpired
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
 
-      {/* Main Game Plate */}
-      <div className="tectonic-plate tectonic-enter px-6 py-8 sm:px-10 sm:py-10">
+      {/* Main Game Card */}
+      <div className="pixel-box pixel-enter px-5 py-6 sm:px-8 sm:py-8">
 
         {/* Emperor */}
-        <div className="tectonic-panel mb-6 px-5 py-4">
-          <p className="mb-1.5 text-[9px] font-medium tracking-[0.32em] uppercase text-[rgba(212,175,55,0.65)]">
-            Current Emperor
+        <div className="pixel-panel mb-5 px-4 py-4">
+          <p className="font-pixel mb-2" style={{ fontSize: '0.38rem', letterSpacing: '0.2em', color: 'var(--text-dim)' }}>
+            ⚔ CURRENT EMPEROR
           </p>
           {isLoading ? (
-            <p className="text-sm text-[rgba(224,224,224,0.3)]">—</p>
+            <p className="font-mono text-sm" style={{ color: 'var(--text-dim)' }}>—</p>
           ) : currentLeader ? (
-            <p className="break-all font-mono text-sm text-[#E0E0E0] sm:text-base">
+            <p className="font-mono break-all text-sm" style={{ color: 'var(--text)' }}>
               {formatAddressWithYou(currentLeader, walletAddress)}
             </p>
           ) : (
-            <p className="text-sm italic text-[rgba(224,224,224,0.3)]">The throne is empty</p>
+            <p className="font-vt text-xl italic" style={{ color: 'var(--text-dim)' }}>
+              The throne is vacant
+            </p>
           )}
         </div>
 
-        <div className="fault-line mb-8" />
+        <div className="pixel-divider mb-5" />
 
         {/* Timer */}
-        <AnimatePresence mode="popLayout">
-          <motion.div
-            key={state?.currentDurationMs?.toString() ?? 'loading'}
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-3 text-center"
-          >
-            <div
-              className={`font-cinzel font-bold leading-none tracking-tight ${timerActive ? 'text-magma-glow' : 'engraved text-[rgba(224,224,224,0.5)]'}`}
-              style={{ fontSize: 'clamp(2.2rem, 9vw, 5.5rem)' }}
-            >
-              <div className="flex flex-wrap items-end justify-center gap-x-3 gap-y-1">
-                {timerParts.map((part) => (
-                  <span key={part.unit} className="inline-flex items-end">
-                    <span className="tabular-nums">{part.value}</span>
-                    <span
-                      className="ml-1 font-normal opacity-35"
-                      style={{ fontSize: 'clamp(0.9rem, 2.2vw, 1.4rem)' }}
-                    >
-                      {part.unit}
-                    </span>
-                  </span>
-                ))}
+        <div className="mb-4">
+          <div className="flex flex-wrap justify-center gap-2 mb-3">
+            {timerParts.map((part) => (
+              <div key={part.unit} className="pixel-panel text-center px-3 py-3" style={{ minWidth: 68 }}>
+                <p
+                  className={`font-vt tabular-nums leading-none ${timerActive ? 'crt-red' : ''}`}
+                  style={{ fontSize: '3rem', color: timerActive ? undefined : 'var(--text-dim)' }}
+                >
+                  {part.value}
+                </p>
+                <p className="font-pixel mt-1" style={{ fontSize: '0.36rem', color: 'var(--text-dim)', letterSpacing: '0.1em' }}>
+                  {part.unit.toUpperCase()}
+                </p>
               </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-
-        <div className="mb-8 text-center">
-          <p className="text-[10px] tracking-[0.22em] uppercase text-[rgba(224,224,224,0.3)]">
-            halved {halvedCount}×
-          </p>
-          <p className="mt-0.5 text-[9px] text-[rgba(224,224,224,0.18)]">
-            Each play halves the timer · adds 30s
-          </p>
-        </div>
-
-        <div className="fault-line mb-8" />
-
-        {/* Opulentia + Tributum */}
-        <div className="mb-8 grid grid-cols-2 gap-3 sm:gap-4">
-          <div className="tectonic-panel px-4 py-5 text-center">
-            <p className="mb-2 text-[8px] font-medium tracking-[0.36em] uppercase text-[#D4AF37]">
-              Opulentia
+            ))}
+          </div>
+          <div className="text-center">
+            <p className="font-pixel" style={{ fontSize: '0.36rem', color: 'var(--text-dim)', letterSpacing: '0.1em' }}>
+              HALVED {halvedCount}×
             </p>
-            <p className="font-cinzel text-2xl font-semibold text-[#E0E0E0] engraved sm:text-3xl tabular-nums">
-              {attoToAlph(pot, 2)}
-            </p>
-            <p className="mt-0.5 text-[10px] text-[rgba(224,224,224,0.4)]">ALPH</p>
-            {formatUsd(pot) && (
-              <p className="mt-1.5 text-[9px] text-[rgba(255,72,0,0.65)]">{formatUsd(pot)}</p>
-            )}
-            <p className="mt-2 text-[8px] tracking-wider text-[rgba(224,224,224,0.18)]">
-              Total prize pool
+            <p className="font-vt mt-0.5" style={{ fontSize: '0.9rem', color: 'rgba(232,224,208,0.25)', letterSpacing: '0.1em' }}>
+              Each play halves the timer · adds 30s
             </p>
           </div>
-          <div className="tectonic-panel px-4 py-5 text-center">
-            <p className="mb-2 text-[8px] font-medium tracking-[0.36em] uppercase text-[rgba(224,224,224,0.38)]">
-              Tributum
+        </div>
+
+        <div className="pixel-divider mb-5" />
+
+        {/* Opulentia + Tributum */}
+        <div className="mb-5 grid grid-cols-2 gap-3">
+          <div className="pixel-panel-gold px-4 py-4 text-center">
+            <p className="font-pixel mb-2" style={{ fontSize: '0.34rem', color: 'rgba(200,150,12,0.75)', letterSpacing: '0.2em' }}>
+              OPULENTIA
             </p>
-            <p className="font-cinzel text-2xl font-semibold text-[#E0E0E0] engraved sm:text-3xl tabular-nums">
+            <p className="font-vt tabular-nums leading-none crt-gold" style={{ fontSize: '2.5rem' }}>
+              {attoToAlph(pot, 2)}
+            </p>
+            <p className="font-pixel mt-1" style={{ fontSize: '0.32rem', color: 'var(--text-dim)' }}>ALPH</p>
+            {formatUsd(pot) && (
+              <p className="font-vt mt-1" style={{ fontSize: '0.9rem', color: 'rgba(255,50,0,0.65)' }}>{formatUsd(pot)}</p>
+            )}
+            <p className="font-pixel mt-2" style={{ fontSize: '0.3rem', color: 'rgba(232,224,208,0.22)' }}>TOTAL PRIZE POOL</p>
+          </div>
+          <div className="pixel-panel px-4 py-4 text-center">
+            <p className="font-pixel mb-2" style={{ fontSize: '0.34rem', color: 'var(--text-dim)', letterSpacing: '0.2em' }}>
+              TRIBUTUM
+            </p>
+            <p className="font-vt tabular-nums leading-none" style={{ fontSize: '2.5rem', color: 'var(--text)' }}>
               {attoToAlph(currentPlayCost, 2)}
             </p>
-            <p className="mt-0.5 text-[10px] text-[rgba(224,224,224,0.4)]">ALPH</p>
+            <p className="font-pixel mt-1" style={{ fontSize: '0.32rem', color: 'var(--text-dim)' }}>ALPH</p>
             {formatUsd(currentPlayCost) && (
-              <p className="mt-1.5 text-[9px] text-[rgba(224,224,224,0.28)]">
-                {formatUsd(currentPlayCost)}
-              </p>
+              <p className="font-vt mt-1" style={{ fontSize: '0.9rem', color: 'rgba(232,224,208,0.35)' }}>{formatUsd(currentPlayCost)}</p>
             )}
-            <p className="mt-2 text-[8px] tracking-wider text-[rgba(224,224,224,0.18)]">
-              Current entry fee
-            </p>
+            <p className="font-pixel mt-2" style={{ fontSize: '0.3rem', color: 'rgba(232,224,208,0.22)' }}>ENTRY FEE</p>
           </div>
         </div>
 
         {/* Status */}
         {status.length > 0 && (
-          <div
-            className="mb-5 border border-[rgba(255,72,0,0.3)] bg-[rgba(255,72,0,0.05)] px-4 py-3 text-center text-xs text-[#FF4800]"
-            style={{ clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)' }}
-          >
-            {status}
+          <div className="pixel-panel-red mb-4 px-4 py-3 text-center">
+            <p className="font-vt text-lg crt-red tracking-wide">{status}</p>
           </div>
         )}
 
         {/* Expired */}
         {isExpired && (
-          <div
-            className="mb-5 border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.04)] px-4 py-4 text-center"
-            style={{ clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)' }}
-          >
-            <p className="font-cinzel text-sm font-semibold tracking-wide text-[#D4AF37]">
-              Time's Up
+          <div className="pixel-panel-gold mb-4 px-4 py-4 text-center">
+            <p className="font-pixel mb-1" style={{ fontSize: '0.5rem', color: 'var(--gold-lit)', letterSpacing: '0.08em' }}>
+              ★ TIME'S UP ★
             </p>
-            <p className="mt-1 text-xs text-[rgba(224,224,224,0.55)]">
+            <p className="font-vt text-lg" style={{ color: 'rgba(232,224,208,0.7)' }}>
               {currentLeader ? formatAddressWithYou(currentLeader, walletAddress) : '—'} wins{' '}
               {attoToAlph(prizePot, 2)} ALPH · Play to claim &amp; start a new round
             </p>
@@ -189,14 +163,11 @@ export function HomePage({
 
         {/* No active round */}
         {!isRoundActive && !isExpired && (
-          <div
-            className="mb-5 border border-[rgba(224,224,224,0.1)] bg-[rgba(224,224,224,0.03)] px-4 py-4 text-center"
-            style={{ clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)' }}
-          >
-            <p className="font-cinzel text-sm font-semibold tracking-wide text-[rgba(224,224,224,0.7)]">
-              The Coliseum awaits
+          <div className="pixel-panel mb-4 px-4 py-4 text-center">
+            <p className="font-pixel mb-1" style={{ fontSize: '0.46rem', color: 'rgba(232,224,208,0.65)', letterSpacing: '0.08em' }}>
+              THE COLOSSEUM AWAITS
             </p>
-            <p className="mt-1 text-xs text-[rgba(224,224,224,0.38)]">
+            <p className="font-vt text-lg" style={{ color: 'var(--text-dim)' }}>
               Be the first to start a new round and claim the throne
             </p>
           </div>
@@ -207,21 +178,21 @@ export function HomePage({
           <button
             onClick={() => walletAddress ? play(false) : connect()}
             disabled={walletAddress ? (!canPlay || isBusy || !hasEnoughForSingle) : false}
-            className={`btn-magma ${timerActive ? 'magma-pulse' : ''}`}
+            className={`btn-pixel-red ${timerActive ? 'pixel-pulse' : ''}`}
           >
             {!walletAddress
-              ? 'Connect Wallet to Play'
+              ? 'CONNECT WALLET'
               : !hasEnoughForSingle
-                ? 'Insufficient Tribute'
+                ? 'INSUFFICIENT TRIBUTE'
                 : playing
-                  ? 'Submitting...'
+                  ? 'SUBMITTING...'
                   : confirming && !playingDouble
-                    ? 'Confirming...'
+                    ? 'CONFIRMING...'
                     : isExpired
-                      ? `Claim & Start New Round · ${attoToAlph(currentPlayCost, 2)} ALPH`
+                      ? `CLAIM + NEW ROUND · ${attoToAlph(currentPlayCost, 2)} ALPH`
                       : !isRoundActive
-                        ? `Start a New Round · ${attoToAlph(currentPlayCost, 2)} ALPH`
-                        : `Enter the Arena · ${attoToAlph(currentPlayCost, 2)} ALPH`}
+                        ? `START NEW ROUND · ${attoToAlph(currentPlayCost, 2)} ALPH`
+                        : `ENTER ARENA · ${attoToAlph(currentPlayCost, 2)} ALPH`}
           </button>
 
           {isRoundActive && !isExpired && (
@@ -229,61 +200,53 @@ export function HomePage({
               <button
                 onClick={() => walletAddress ? play(true) : connect()}
                 disabled={walletAddress ? (!canPlay || isBusy || !hasEnoughForDouble) : false}
-                className="btn-gold"
+                className="btn-pixel-gold"
               >
-                <Zap size={13} />
+                ⚡{' '}
                 {!walletAddress
-                  ? 'Connect Wallet'
+                  ? 'CONNECT WALLET'
                   : !hasEnoughForDouble
-                    ? 'Need More ALPH'
+                    ? 'NEED MORE ALPH'
                     : playingDouble
-                      ? 'Submitting...'
+                      ? 'SUBMITTING...'
                       : confirming && playingDouble
-                        ? 'Confirming...'
-                        : `Double Down · ${attoToAlph(doublePlayCost, 2)} ALPH`}
+                        ? 'CONFIRMING...'
+                        : `DOUBLE DOWN · ${attoToAlph(doublePlayCost, 2)} ALPH`}
               </button>
-              <p className="text-center text-[9px] tracking-wider text-[rgba(224,224,224,0.22)]">
-                Double down quarters the timer (÷4)
+              <p className="font-pixel text-center" style={{ fontSize: '0.32rem', color: 'rgba(232,224,208,0.25)', letterSpacing: '0.08em' }}>
+                DOUBLE DOWN QUARTERS THE TIMER (÷4)
               </p>
             </>
           )}
         </div>
 
         {walletAddress && !hasEnoughForSingle && (
-          <p className="mt-3 text-center text-[10px] text-[rgba(224,224,224,0.35)]">
+          <p className="font-vt mt-3 text-center text-lg" style={{ color: 'rgba(232,224,208,0.4)' }}>
             Need at least {attoToAlph(currentPlayCost, 2)} ALPH to enter
           </p>
         )}
 
       </div>
 
-      {/* Prize Split Plates */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
-        <div className="tectonic-plate px-4 py-5 text-center">
-          <p className="mb-1.5 text-[8px] tracking-[0.3em] uppercase text-[rgba(224,224,224,0.3)]">
-            Prize Pot
-          </p>
-          <p className="font-cinzel text-lg font-semibold text-[#E0E0E0] engraved tabular-nums sm:text-xl">
-            {attoToAlph(prizePot, 2)}
-          </p>
-          <p className="text-[10px] text-[rgba(224,224,224,0.38)]">ALPH</p>
+      {/* Prize Split */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="pixel-box px-4 py-5 text-center">
+          <p className="font-pixel mb-1" style={{ fontSize: '0.32rem', color: 'var(--text-dim)', letterSpacing: '0.2em' }}>PRIZE POT</p>
+          <p className="font-vt tabular-nums crt-gold" style={{ fontSize: '2rem' }}>{attoToAlph(prizePot, 2)}</p>
+          <p className="font-pixel" style={{ fontSize: '0.3rem', color: 'var(--text-dim)' }}>ALPH</p>
           {formatUsd(prizePot) && (
-            <p className="mt-1 text-[9px] text-[rgba(255,72,0,0.55)]">{formatUsd(prizePot)}</p>
+            <p className="font-vt mt-1" style={{ fontSize: '0.9rem', color: 'rgba(255,50,0,0.55)' }}>{formatUsd(prizePot)}</p>
           )}
-          <p className="mt-2 text-[8px] tracking-wider text-[rgba(224,224,224,0.18)]">80% to winner</p>
+          <p className="font-pixel mt-2" style={{ fontSize: '0.28rem', color: 'rgba(232,224,208,0.22)' }}>80% TO WINNER</p>
         </div>
-        <div className="tectonic-plate px-4 py-5 text-center">
-          <p className="mb-1.5 text-[8px] tracking-[0.3em] uppercase text-[rgba(224,224,224,0.3)]">
-            Next Round Seed
-          </p>
-          <p className="font-cinzel text-lg font-semibold text-[#E0E0E0] engraved tabular-nums sm:text-xl">
-            {attoToAlph(totalSavings, 2)}
-          </p>
-          <p className="text-[10px] text-[rgba(224,224,224,0.38)]">ALPH</p>
+        <div className="pixel-box px-4 py-5 text-center">
+          <p className="font-pixel mb-1" style={{ fontSize: '0.32rem', color: 'var(--text-dim)', letterSpacing: '0.2em' }}>NEXT SEED</p>
+          <p className="font-vt tabular-nums" style={{ fontSize: '2rem', color: 'var(--text)' }}>{attoToAlph(totalSavings, 2)}</p>
+          <p className="font-pixel" style={{ fontSize: '0.3rem', color: 'var(--text-dim)' }}>ALPH</p>
           {formatUsd(totalSavings) && (
-            <p className="mt-1 text-[9px] text-[rgba(224,224,224,0.25)]">{formatUsd(totalSavings)}</p>
+            <p className="font-vt mt-1" style={{ fontSize: '0.9rem', color: 'rgba(232,224,208,0.28)' }}>{formatUsd(totalSavings)}</p>
           )}
-          <p className="mt-2 text-[8px] tracking-wider text-[rgba(224,224,224,0.18)]">20% seeds next round</p>
+          <p className="font-pixel mt-2" style={{ fontSize: '0.28rem', color: 'rgba(232,224,208,0.22)' }}>20% SEEDS NEXT ROUND</p>
         </div>
       </div>
 

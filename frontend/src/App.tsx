@@ -785,40 +785,53 @@ function App() {
   }, [cleanedWalletAddress, hasMyConfirmedRoundBet, myBetTarget, currentRoundId, myBetAmount])
 
   return (
-    <div className="stone-bg flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
 
       {/* Header */}
-      <header className="sticky top-0 z-20 flex items-center justify-between border-b border-[rgba(224,224,224,0.05)] bg-[rgba(5,5,5,0.92)] px-4 py-3 backdrop-blur-md sm:px-6">
+      <header
+        className="sticky top-0 z-20 flex items-center justify-between px-4 py-3 sm:px-6"
+        style={{ background: 'var(--surface)', borderBottom: '3px solid rgba(255,255,255,0.72)', boxShadow: '0 5px 0 #000' }}
+      >
         <div>
-          <h1 className="font-cinzel text-lg font-semibold tracking-[0.18em] text-[#E0E0E0] engraved sm:text-xl">
-            The <span className="normal-case">h</span>ALPHing
+          <h1
+            className="font-pixel leading-snug"
+            style={{
+              fontSize: '0.6rem',
+              letterSpacing: '0.1em',
+              background: 'linear-gradient(90deg, #f5c518 0%, #ff8c00 45%, #cc2000 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            THE <span style={{ textTransform: 'lowercase' }}>h</span>ALPHing
           </h1>
-          <p className="text-[9px] tracking-[0.28em] uppercase text-[rgba(224,224,224,0.3)]">
-            Timer-halving survival game
+          <p className="font-vt mt-0.5" style={{ fontSize: '1rem', color: 'var(--text-dim)', letterSpacing: '0.2em' }}>
+            GLADIATORIAL ARENA
           </p>
         </div>
         <AlephiumConnectButton />
       </header>
 
       {/* Nav */}
-      <nav className="flex justify-center gap-2 px-4 py-4 sm:py-5">
+      <nav className="flex justify-center gap-3 px-4 py-5 sm:py-6">
         <button
           onClick={() => navigateToPage('game')}
-          className={`stone-tab ${activePage === 'game' ? 'stone-tab-active' : ''}`}
+          className={`pixel-tab ${activePage === 'game' ? 'pixel-tab-active' : ''}`}
         >
-          Game
+          Arena
         </button>
         <button
           onClick={() => navigateToPage('betting')}
-          className={`stone-tab ${activePage === 'betting' ? 'stone-tab-active' : ''}`}
+          className={`pixel-tab ${activePage === 'betting' ? 'pixel-tab-active' : ''}`}
         >
-          Predicting
+          Augury
         </button>
         <button
           onClick={() => navigateToPage('instructions')}
-          className={`stone-tab ${activePage === 'instructions' ? 'stone-tab-active' : ''}`}
+          className={`pixel-tab ${activePage === 'instructions' ? 'pixel-tab-active' : ''}`}
         >
-          How to Play
+          Codex
         </button>
       </nav>
 
@@ -918,43 +931,57 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[rgba(224,224,224,0.04)] py-10 text-center">
-        <p className="text-[9px] tracking-[0.32em] uppercase text-[rgba(224,224,224,0.18)]">
-          Built on Alephium
+      <footer className="py-8 text-center" style={{ borderTop: '2px solid var(--border-dim)' }}>
+        <p className="font-pixel" style={{ fontSize: '0.38rem', color: 'var(--text-dim)', letterSpacing: '0.12em' }}>
+          BUILT ON ALEPHIUM
         </p>
       </footer>
 
       {/* Loading Overlay */}
       {isBusy && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-[rgba(5,5,5,0.94)] backdrop-blur-sm">
-          <div className="tectonic-plate tectonic-enter w-full max-w-sm px-10 py-9 text-center">
+        <div className="fixed inset-0 z-50 grid place-items-center" style={{ background: 'rgba(3,1,8,0.94)' }}>
+          <div className="pixel-box pixel-enter mx-4 w-full max-w-sm px-8 py-8 text-center">
             <div
-              className="mx-auto mb-5 h-9 w-9 animate-spin border-2 border-[#FF4800] border-t-transparent"
-              style={{ clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))' }}
+              className="mx-auto mb-5 pixel-spin"
+              style={{
+                width: 32,
+                height: 32,
+                border: '3px solid #fff',
+                borderTopColor: 'var(--crt-red)',
+                boxShadow: '0 0 12px rgba(255,50,0,0.4)',
+              }}
             />
-            <p className="font-cinzel text-base font-semibold tracking-wide text-[#E0E0E0] engraved">
+            <p className="font-pixel" style={{ fontSize: '0.48rem', letterSpacing: '0.06em', color: 'var(--text)', lineHeight: 2 }}>
               {(playing || playingDouble)
-                ? (playingDouble ? 'Submitting double tribute...' : 'Submitting tribute...')
+                ? (playingDouble ? 'PAYING DOUBLE TRIBUTE' : 'ENTERING ARENA')
                 : placingBet
-                  ? 'Placing prediction...'
+                  ? 'PLACING PREDICTION'
                   : finalizingBetRound
-                    ? 'Finalizing round...'
+                    ? 'FINALIZING ROUND'
                     : claimingBet
-                      ? 'Claiming winnings...'
-                      : 'Awaiting confirmation...'}
+                      ? 'CLAIMING SPOILS'
+                      : 'AWAITING CONFIRMATION'}
             </p>
-            <p className="mt-2 text-xs tracking-widest text-[rgba(224,224,224,0.35)]">
-              Please wait
+            <p className="font-vt mt-2" style={{ fontSize: '1.1rem', color: 'var(--text-dim)', letterSpacing: '0.15em' }}>
+              Please wait<span className="blink">_</span>
             </p>
             {pendingTxId && (
               <a
                 href={`${EXPLORER_URL}/transactions/${pendingTxId}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-5 inline-block border border-[rgba(255,72,0,0.4)] px-4 py-2 text-[10px] tracking-[0.18em] uppercase text-[#FF4800] transition hover:border-[#FF4800] hover:bg-[rgba(255,72,0,0.06)]"
-                style={{ clipPath: 'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))' }}
+                className="font-pixel mt-5 inline-block"
+                style={{
+                  fontSize: '0.38rem',
+                  letterSpacing: '0.06em',
+                  color: 'var(--crt-red)',
+                  border: '2px solid rgba(255,50,0,0.45)',
+                  padding: '8px 14px',
+                  boxShadow: '2px 2px 0 #000',
+                  textDecoration: 'none',
+                }}
               >
-                View Transaction ↗
+                VIEW TX ↗
               </a>
             )}
           </div>

@@ -1,81 +1,79 @@
 export function HowToPage() {
   return (
-    <div className="tectonic-plate tectonic-enter px-6 py-8 sm:px-10 sm:py-10">
+    <div className="pixel-box pixel-enter px-5 py-7 sm:px-8 sm:py-8">
 
-      <h2 className="font-cinzel mb-8 text-center text-xl font-semibold tracking-[0.2em] text-[#E0E0E0] engraved sm:text-2xl">
-        How to Play
-      </h2>
+      <p className="font-pixel mb-7 text-center" style={{ fontSize: '0.55rem', letterSpacing: '0.15em', color: 'var(--text)' }}>
+        ⚔ CODEX ⚔
+      </p>
 
       <div className="space-y-0">
 
         {/* The Game */}
-        <section className="pb-7">
-          <h3 className="font-cinzel mb-3 text-base font-semibold tracking-wider text-[#D4AF37]">
-            The Game
-          </h3>
-          <p className="mb-2 text-sm leading-relaxed text-[rgba(224,224,224,0.65)]">
+        <section className="pb-6">
+          <p className="font-pixel mb-3" style={{ fontSize: '0.44rem', color: 'var(--crt-red)', letterSpacing: '0.1em' }}>
+            THE GAME
+          </p>
+          <p className="font-vt text-xl leading-relaxed" style={{ color: 'rgba(232,224,208,0.7)' }}>
             The hALPHing is a timer-halving survival game on Alephium blockchain. A countdown timer
             starts at ~2026 years. Each time someone plays, the timer is{' '}
-            <strong className="text-[rgba(224,224,224,0.9)]">halved</strong> and that player becomes
-            the current leader.
+            <span style={{ color: 'var(--text)' }}>halved</span> and that player becomes
+            the current emperor.
           </p>
-          <p className="text-sm leading-relaxed text-[rgba(224,224,224,0.65)]">
-            When the timer runs out, the last leader{' '}
-            <strong className="text-[rgba(224,224,224,0.9)]">wins 80%</strong> of the pot. The
+          <p className="font-vt text-xl leading-relaxed mt-2" style={{ color: 'rgba(232,224,208,0.7)' }}>
+            When the timer runs out, the last emperor{' '}
+            <span style={{ color: 'var(--text)' }}>wins 80%</span> of the pot. The
             remaining 20% seeds the next round.
           </p>
         </section>
 
-        <div className="fault-line mb-7" />
+        <div className="pixel-divider mb-6" />
 
         {/* How to Enter */}
-        <section className="pb-7">
-          <h3 className="font-cinzel mb-3 text-base font-semibold tracking-wider text-[#D4AF37]">
-            How to Enter
-          </h3>
+        <section className="pb-6">
+          <p className="font-pixel mb-3" style={{ fontSize: '0.44rem', color: 'var(--crt-red)', letterSpacing: '0.1em' }}>
+            HOW TO ENTER
+          </p>
           <div className="space-y-2">
-            <div
-              className="tectonic-panel px-4 py-3"
-            >
-              <p className="text-sm text-[rgba(224,224,224,0.7)]">
-                <strong className="text-[rgba(224,224,224,0.9)]">Enter the Arena</strong> — Pay the
-                entry fee to halve the timer (÷2) and become leader
+            <div className="pixel-panel px-4 py-3">
+              <p className="font-vt text-xl" style={{ color: 'rgba(232,224,208,0.75)' }}>
+                <span style={{ color: 'var(--text)' }}>Enter the Arena</span> — Pay the
+                entry fee to halve the timer (÷2) and become emperor
               </p>
             </div>
-            <div className="tectonic-panel px-4 py-3">
-              <p className="text-sm text-[rgba(224,224,224,0.7)]">
-                <strong className="text-[rgba(224,224,224,0.9)]">Double Down</strong> — Pay 2× the
-                entry fee to quarter the timer (÷4) and become leader
+            <div className="pixel-panel px-4 py-3">
+              <p className="font-vt text-xl" style={{ color: 'rgba(232,224,208,0.75)' }}>
+                <span style={{ color: 'var(--text)' }}>Double Down</span> — Pay 2× the
+                entry fee to quarter the timer (÷4) and become emperor
               </p>
             </div>
           </div>
-          <p className="mt-3 text-[10px] text-[rgba(224,224,224,0.32)]">
+          <p className="font-pixel mt-3" style={{ fontSize: '0.32rem', color: 'rgba(232,224,208,0.3)' }}>
             Entry fee starts at 5 ALPH · increases 1% after each round settles
           </p>
         </section>
 
-        <div className="fault-line mb-7" />
+        <div className="pixel-divider mb-6" />
 
         {/* Predicting */}
-        <section className="pb-7">
-          <h3 className="font-cinzel mb-3 text-base font-semibold tracking-wider text-[#D4AF37]">
-            Predicting
-          </h3>
-          <p className="text-sm leading-relaxed text-[rgba(224,224,224,0.65)]">
+        <section className="pb-6">
+          <p className="font-pixel mb-3" style={{ fontSize: '0.44rem', color: 'var(--crt-red)', letterSpacing: '0.1em' }}>
+            PREDICTING
+          </p>
+          <p className="font-vt text-xl leading-relaxed" style={{ color: 'rgba(232,224,208,0.7)' }}>
             Bet on who you think will win the current round. Place predictions on any player who has
             entered the arena. If your chosen player wins, you receive a proportional share of the
             prediction pool based on your stake.
           </p>
         </section>
 
-        <div className="fault-line mb-7" />
+        <div className="pixel-divider mb-6" />
 
         {/* Getting ALPH */}
-        <section className="pb-7">
-          <h3 className="font-cinzel mb-3 text-base font-semibold tracking-wider text-[#D4AF37]">
-            Getting ALPH
-          </h3>
-          <p className="mb-4 text-sm text-[rgba(224,224,224,0.65)]">
+        <section className="pb-6">
+          <p className="font-pixel mb-3" style={{ fontSize: '0.44rem', color: 'var(--crt-red)', letterSpacing: '0.1em' }}>
+            GETTING ALPH
+          </p>
+          <p className="font-vt text-xl mb-4" style={{ color: 'rgba(232,224,208,0.7)' }}>
             To play, you need ALPH — Alephium's native token.
           </p>
           <ol className="space-y-3">
@@ -90,7 +88,11 @@ export function HowToPage() {
                       href="https://alephium.org/wallets"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="border-b border-[rgba(212,175,55,0.4)] text-[#D4AF37] transition hover:border-[#D4AF37]"
+                      style={{
+                        color: 'var(--gold-lit)',
+                        borderBottom: '1px solid rgba(240,192,48,0.4)',
+                        textDecoration: 'none',
+                      }}
                     >
                       Alephium Extension Wallet
                     </a>{' '}
@@ -114,7 +116,11 @@ export function HowToPage() {
                           href={href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="border-b border-[rgba(212,175,55,0.4)] text-[#D4AF37] transition hover:border-[#D4AF37]"
+                          style={{
+                            color: 'var(--gold-lit)',
+                            borderBottom: '1px solid rgba(240,192,48,0.4)',
+                            textDecoration: 'none',
+                          }}
                         >
                           {label}
                         </a>
@@ -135,26 +141,29 @@ export function HowToPage() {
                 body: 'Click "Connect Wallet" and enter the arena',
               },
             ].map(({ n, title, body }) => (
-              <li key={n} className="flex gap-4 text-sm">
-                <span className="font-cinzel mt-0.5 flex-shrink-0 text-[10px] font-semibold tabular-nums text-[rgba(255,72,0,0.55)]">
+              <li key={n} className="flex gap-4">
+                <span
+                  className="font-pixel flex-shrink-0 mt-1"
+                  style={{ fontSize: '0.4rem', color: 'rgba(255,50,0,0.6)', fontVariantNumeric: 'tabular-nums' }}
+                >
                   {n}
                 </span>
-                <p className="text-[rgba(224,224,224,0.65)]">
-                  <strong className="text-[rgba(224,224,224,0.88)]">{title}</strong> — {body}
+                <p className="font-vt text-xl" style={{ color: 'rgba(232,224,208,0.7)' }}>
+                  <span style={{ color: 'var(--text)' }}>{title}</span> — {body}
                 </p>
               </li>
             ))}
           </ol>
         </section>
 
-        <div className="fault-line mb-7" />
+        <div className="pixel-divider mb-6" />
 
         {/* Strategy */}
         <section>
-          <h3 className="font-cinzel mb-3 text-base font-semibold tracking-wider text-[rgba(224,224,224,0.5)]">
-            Strategy
-          </h3>
-          <ul className="space-y-2 text-sm text-[rgba(224,224,224,0.45)]">
+          <p className="font-pixel mb-3" style={{ fontSize: '0.44rem', color: 'rgba(232,224,208,0.4)', letterSpacing: '0.1em' }}>
+            STRATEGY
+          </p>
+          <ul className="space-y-2">
             {[
               'Early plays are cheap but leave a lot of time for others to react',
               'As the timer shrinks, the cost of each play rises — higher risk, higher reward',
@@ -162,8 +171,8 @@ export function HowToPage() {
               'Watch the pot size — bigger pots draw more competition near the end',
             ].map((tip) => (
               <li key={tip} className="flex gap-3">
-                <span className="mt-1.5 h-1 w-1 flex-shrink-0 bg-[rgba(255,72,0,0.4)]" />
-                {tip}
+                <span className="mt-2 flex-shrink-0" style={{ width: 4, height: 4, background: 'rgba(255,50,0,0.45)', flexShrink: 0, marginTop: 10 }} />
+                <p className="font-vt text-xl" style={{ color: 'rgba(232,224,208,0.45)' }}>{tip}</p>
               </li>
             ))}
           </ul>

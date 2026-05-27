@@ -120,64 +120,58 @@ export function BettingPage({
     <div className="space-y-4">
 
       {/* Round Header */}
-      <div className="tectonic-plate tectonic-enter px-5 py-5 sm:px-7">
-        <p className="mb-4 text-center text-[9px] tracking-[0.3em] uppercase text-[rgba(224,224,224,0.35)]">
-          On-chain Winner Prediction
+      <div className="pixel-box pixel-enter px-5 py-5 sm:px-7">
+        <p className="font-pixel mb-4 text-center" style={{ fontSize: '0.36rem', letterSpacing: '0.2em', color: 'var(--text-dim)' }}>
+          ON-CHAIN WINNER PREDICTION
         </p>
         <div className="grid grid-cols-3 gap-2 text-center">
-          <div className="tectonic-panel px-3 py-3">
-            <p className="text-[8px] tracking-[0.25em] uppercase text-[rgba(224,224,224,0.35)]">Round</p>
-            <p className="mt-1 font-cinzel text-lg font-semibold text-[#E0E0E0] engraved tabular-nums">
+          <div className="pixel-panel px-3 py-3">
+            <p className="font-pixel" style={{ fontSize: '0.32rem', letterSpacing: '0.2em', color: 'var(--text-dim)' }}>ROUND</p>
+            <p className="font-vt mt-1 tabular-nums" style={{ fontSize: '1.6rem', color: 'var(--text)' }}>
               #{currentRoundId.toString()}
             </p>
           </div>
-          <div className="tectonic-panel px-3 py-3">
-            <p className="text-[8px] tracking-[0.25em] uppercase text-[rgba(224,224,224,0.35)]">Game Pool</p>
-            <p className="mt-1 font-cinzel text-base font-semibold text-[#E0E0E0] engraved tabular-nums">
+          <div className="pixel-panel px-3 py-3">
+            <p className="font-pixel" style={{ fontSize: '0.32rem', letterSpacing: '0.2em', color: 'var(--text-dim)' }}>GAME POOL</p>
+            <p className="font-vt mt-1 tabular-nums" style={{ fontSize: '1.4rem', color: 'var(--text)' }}>
               {attoToAlph(pot, 2)}
             </p>
-            <p className="text-[9px] text-[rgba(224,224,224,0.38)]">ALPH</p>
+            <p className="font-pixel" style={{ fontSize: '0.28rem', color: 'var(--text-dim)' }}>ALPH</p>
           </div>
-          <div className="tectonic-panel px-3 py-3">
-            <p className="text-[8px] tracking-[0.25em] uppercase text-[rgba(224,224,224,0.35)]">Countdown</p>
-            <p className="mt-1 font-mono text-sm text-[#E0E0E0] tabular-nums leading-tight">
+          <div className="pixel-panel px-3 py-3">
+            <p className="font-pixel" style={{ fontSize: '0.32rem', letterSpacing: '0.2em', color: 'var(--text-dim)' }}>COUNTDOWN</p>
+            <p className="font-mono mt-1 text-sm tabular-nums leading-tight" style={{ color: 'var(--text)' }}>
               {timeLeftMs === 0n ? '0s' : formatCompactTimer(timerParts)}
             </p>
           </div>
         </div>
 
         {currentLeader && (
-          <div
-            className="mt-4 border border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.04)] px-4 py-3 text-center"
-            style={{ clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%)' }}
-          >
-            <p className="text-[8px] tracking-[0.25em] uppercase text-[rgba(212,175,55,0.55)]">
-              Current Leader
+          <div className="pixel-panel-gold mt-4 px-4 py-3 text-center">
+            <p className="font-pixel mb-1" style={{ fontSize: '0.3rem', letterSpacing: '0.2em', color: 'rgba(200,150,12,0.65)' }}>
+              ⚔ CURRENT EMPEROR
             </p>
-            <p className="mt-1 break-all font-mono text-sm font-medium text-[#E0E0E0] sm:text-base">
+            <p className="font-mono break-all text-sm font-medium" style={{ color: 'var(--text)' }}>
               {formatAddressWithYou(currentLeader, walletAddress)}
             </p>
           </div>
         )}
       </div>
 
-      {/* Two-column layout for form + stats on larger screens */}
+      {/* Two-column layout */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
         {/* Prediction Form */}
-        <div className="tectonic-plate px-5 py-6 sm:px-7">
-          <p className="mb-5 text-[9px] tracking-[0.28em] uppercase text-[rgba(224,224,224,0.35)]">
-            Place Prediction
+        <div className="pixel-box px-5 py-6 sm:px-7">
+          <p className="font-pixel mb-5" style={{ fontSize: '0.36rem', letterSpacing: '0.2em', color: 'var(--text-dim)' }}>
+            PLACE PREDICTION
           </p>
 
           {/* Window closed warning */}
           {isBettingWindowClosed && isRoundActive && (
-            <div
-              className="mb-4 border border-[rgba(255,72,0,0.25)] bg-[rgba(255,72,0,0.04)] px-4 py-3 text-center"
-              style={{ clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)' }}
-            >
-              <p className="text-xs font-medium text-[rgba(255,72,0,0.85)]">Prediction Window Closed</p>
-              <p className="mt-1 text-[10px] text-[rgba(224,224,224,0.4)]">
+            <div className="pixel-panel-red mb-4 px-4 py-3 text-center">
+              <p className="font-pixel" style={{ fontSize: '0.44rem', color: 'rgba(255,50,0,0.9)' }}>PREDICTION WINDOW CLOSED</p>
+              <p className="font-vt mt-1 text-lg" style={{ color: 'rgba(232,224,208,0.45)' }}>
                 Closes 30 min before timer ends
               </p>
             </div>
@@ -186,44 +180,45 @@ export function BettingPage({
           <div className={`space-y-3 ${isBettingWindowClosed ? 'pointer-events-none opacity-40' : ''}`}>
             {/* Target Address */}
             <div>
-              <label className="mb-1.5 block text-[9px] tracking-[0.22em] uppercase text-[rgba(224,224,224,0.45)]">
-                Target Address
+              <label className="font-pixel mb-1.5 block" style={{ fontSize: '0.34rem', letterSpacing: '0.15em', color: 'var(--text-dim)' }}>
+                TARGET ADDRESS
               </label>
               <input
                 value={betTarget}
                 onChange={(e) => setBetTarget(e.target.value)}
                 placeholder="Paste any Alephium address"
                 disabled={isBettingWindowClosed}
-                className="stone-input font-mono"
-                style={{ fontFamily: "'Courier New', monospace", fontSize: '0.7rem' }}
+                className="pixel-input"
               />
             </div>
 
             {/* Player Picker */}
-            <div
-              className="border border-[rgba(224,224,224,0.06)] bg-[rgba(5,5,5,0.5)]"
-              style={{ clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)' }}
-            >
-              <p className="border-b border-[rgba(224,224,224,0.06)] px-3 py-2 text-[8px] tracking-[0.25em] uppercase text-[rgba(224,224,224,0.35)]">
-                Eligible Players
+            <div className="pixel-panel overflow-hidden">
+              <p className="font-pixel border-b px-3 py-2" style={{ fontSize: '0.3rem', letterSpacing: '0.2em', color: 'var(--text-dim)', borderColor: 'var(--border-dim)' }}>
+                ELIGIBLE PLAYERS
               </p>
               <div className="max-h-36 overflow-auto p-2">
                 {selectablePlayers.length === 0 ? (
-                  <p className="px-1 py-1 text-[10px] text-[rgba(224,224,224,0.3)]">No players yet</p>
+                  <p className="font-vt px-1 py-1 text-lg" style={{ color: 'var(--text-dim)' }}>No players yet</p>
                 ) : (
                   selectablePlayers.map((player) => (
                     <button
                       key={player}
                       onClick={() => setBetTarget(player)}
-                      className={`mb-1 block w-full px-2 py-1.5 text-left font-mono text-[10px] transition-colors ${
+                      className={`mb-1 block w-full px-2 py-1.5 text-left font-mono text-xs transition-colors ${
                         cleanedBetTarget === player
-                          ? 'bg-[rgba(255,72,0,0.1)] text-[#E0E0E0] border-l-2 border-[#FF4800]'
-                          : 'text-[rgba(224,224,224,0.55)] hover:bg-[rgba(224,224,224,0.04)] hover:text-[rgba(224,224,224,0.8)]'
+                          ? 'border-l-2'
+                          : 'hover:bg-[rgba(232,224,208,0.04)]'
                       }`}
+                      style={
+                        cleanedBetTarget === player
+                          ? { background: 'rgba(255,50,0,0.08)', color: 'var(--text)', borderColor: 'var(--crt-red)' }
+                          : { color: 'var(--text-dim)' }
+                      }
                     >
                       {formatAddressWithYou(player, walletAddress)}
                       {player === stripAddressGroup(currentLeader) && (
-                        <span className="ml-2 text-[rgba(212,175,55,0.7)]">· Leader</span>
+                        <span className="ml-2" style={{ color: 'rgba(200,150,12,0.7)' }}>· Emperor</span>
                       )}
                     </button>
                   ))
@@ -232,18 +227,18 @@ export function BettingPage({
             </div>
 
             {betTarget.trim().length > 0 && !isBetTargetValidAddress && (
-              <p className="text-[10px] text-[rgba(255,72,0,0.8)]">Invalid Alephium address</p>
+              <p className="font-vt text-lg crt-red">Invalid Alephium address</p>
             )}
             {isBetTargetValidAddress && !isTargetInRecentPlayers && (
-              <p className="text-[10px] text-[rgba(224,224,224,0.4)]">
+              <p className="font-vt text-lg" style={{ color: 'rgba(232,224,208,0.45)' }}>
                 Valid address but not in recent players — tx may fail
               </p>
             )}
 
             {/* Amount */}
             <div>
-              <label className="mb-1.5 block text-[9px] tracking-[0.22em] uppercase text-[rgba(224,224,224,0.45)]">
-                Bet Amount
+              <label className="font-pixel mb-1.5 block" style={{ fontSize: '0.34rem', letterSpacing: '0.15em', color: 'var(--text-dim)' }}>
+                BET AMOUNT
               </label>
               <div className="relative">
                 <input
@@ -255,19 +250,19 @@ export function BettingPage({
                   onChange={(e) => setBetAmountInput(sanitizeBetAmountInput(e.target.value))}
                   placeholder="0.1"
                   disabled={isBettingWindowClosed}
-                  className="stone-input pr-14"
+                  className="pixel-input pr-14"
                 />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[9px] tracking-widest uppercase text-[rgba(224,224,224,0.3)]">
+                <span className="font-pixel pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" style={{ fontSize: '0.3rem', letterSpacing: '0.1em', color: 'var(--text-dim)' }}>
                   ALPH
                 </span>
               </div>
             </div>
 
             {betAmountInput.trim().length > 0 && !isBetAmountPositive && (
-              <p className="text-[10px] text-[rgba(255,72,0,0.8)]">Amount must be greater than 0</p>
+              <p className="font-vt text-lg crt-red">Amount must be greater than 0</p>
             )}
             {betAmountInput.trim().length > 0 && isBetAmountPositive && !isBetAmountValid && (
-              <p className="text-[10px] text-[rgba(255,72,0,0.8)]">
+              <p className="font-vt text-lg crt-red">
                 Min {attoToAlph(minBet, 2)} ALPH
               </p>
             )}
@@ -275,93 +270,84 @@ export function BettingPage({
 
           {/* Selected Player Info */}
           {cleanedBetTarget.length > 0 && (
-            <div
-              className="mt-4 border border-[rgba(212,175,55,0.18)] bg-[rgba(212,175,55,0.03)] px-4 py-3"
-              style={{ clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)' }}
-            >
-              <div className="flex items-center justify-between text-[10px]">
-                <span className="text-[rgba(224,224,224,0.45)]">Target</span>
-                <span className="font-mono text-[rgba(224,224,224,0.75)]">
+            <div className="pixel-panel-gold mt-4 px-4 py-3">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-vt text-lg" style={{ color: 'var(--text-dim)' }}>Target</span>
+                <span className="font-mono" style={{ color: 'rgba(232,224,208,0.75)' }}>
                   {formatAddressWithYou(cleanedBetTarget, walletAddress)}
                 </span>
               </div>
               {selectedPlayerPool > 0n ? (
                 <>
-                  <div className="mt-1.5 flex items-center justify-between text-[10px]">
-                    <span className="text-[rgba(224,224,224,0.45)]">Pool on player</span>
-                    <span className="text-[rgba(224,224,224,0.7)]">{attoToAlph(selectedPlayerPool, 2)} ALPH</span>
+                  <div className="mt-1.5 flex items-center justify-between">
+                    <span className="font-vt text-lg" style={{ color: 'var(--text-dim)' }}>Pool on player</span>
+                    <span className="font-vt text-lg" style={{ color: 'rgba(232,224,208,0.7)' }}>{attoToAlph(selectedPlayerPool, 2)} ALPH</span>
                   </div>
-                  <div className="mt-1 flex items-center justify-between text-[10px]">
-                    <span className="text-[rgba(224,224,224,0.45)]">Current odds</span>
-                    <span className="font-semibold text-[#D4AF37]">
+                  <div className="mt-1 flex items-center justify-between">
+                    <span className="font-vt text-lg" style={{ color: 'var(--text-dim)' }}>Current odds</span>
+                    <span className="font-vt text-xl font-semibold crt-gold">
                       {(Number(totalBettingPool * 100n / selectedPlayerPool) / 100).toFixed(2)}x
                     </span>
                   </div>
                 </>
               ) : (
-                <div className="mt-1.5 flex items-center justify-between text-[10px]">
-                  <span className="text-[rgba(224,224,224,0.45)]">No bets yet</span>
-                  <span className="text-[rgba(212,175,55,0.7)]">Be first</span>
+                <div className="mt-1.5 flex items-center justify-between">
+                  <span className="font-vt text-lg" style={{ color: 'var(--text-dim)' }}>No bets yet</span>
+                  <span className="font-vt text-lg" style={{ color: 'rgba(200,150,12,0.7)' }}>Be first</span>
                 </div>
               )}
             </div>
           )}
 
           {/* Payout estimate */}
-          <div className="mt-3 text-center text-[9px] text-[rgba(224,224,224,0.35)]">
-            Min: {attoToAlph(minBet, 2)} ALPH
+          <div className="mt-3 text-center">
+            <span className="font-vt text-lg" style={{ color: 'var(--text-dim)' }}>Min: {attoToAlph(minBet, 2)} ALPH</span>
             {!isBettingWindowClosed && payoutQuote > 0n && betAmount !== null && betAmount > 0n && (
               <span
-                className="ml-2 bg-[rgba(212,175,55,0.1)] px-2 py-0.5 font-semibold text-[#D4AF37]"
-                style={{ clipPath: 'polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px))' }}
+                className="font-vt ml-2 px-2 py-0.5 text-lg font-semibold crt-gold"
+                style={{ background: 'rgba(200,150,12,0.1)', border: '1px solid rgba(200,150,12,0.3)' }}
               >
                 Est. {attoToAlph(payoutQuote, 2)} ALPH ({(Number(payoutQuote * 100n / betAmount) / 100).toFixed(2)}x)
               </span>
             )}
           </div>
-          <p className="mt-0.5 text-center text-[9px] italic text-[rgba(224,224,224,0.2)]">
+          <p className="font-vt mt-0.5 text-center text-lg italic" style={{ color: 'rgba(232,224,208,0.22)' }}>
             Estimate moves as others bet
           </p>
 
           {/* Status */}
           {betStatus.length > 0 && (
-            <div
-              className="mt-4 border border-[rgba(224,224,224,0.1)] bg-[rgba(224,224,224,0.03)] px-3 py-2.5 text-center text-[10px] text-[rgba(224,224,224,0.7)]"
-              style={{ clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)' }}
-            >
-              {betStatus}
+            <div className="pixel-panel mt-4 px-3 py-2.5 text-center">
+              <p className="font-vt text-lg" style={{ color: 'rgba(232,224,208,0.7)' }}>{betStatus}</p>
             </div>
           )}
 
           {/* Active Bet Panel */}
           {shouldShowActiveBetPanel && activeBet && (
-            <div
-              className="mt-4 border border-[rgba(255,72,0,0.22)] bg-[rgba(255,72,0,0.04)] px-4 py-4"
-              style={{ clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)' }}
-            >
-              <p className="mb-2 text-[8px] tracking-[0.28em] uppercase text-[rgba(255,72,0,0.7)]">
-                Active Prediction
+            <div className="pixel-panel-red mt-4 px-4 py-4">
+              <p className="font-pixel mb-2" style={{ fontSize: '0.32rem', letterSpacing: '0.2em', color: 'rgba(255,50,0,0.7)' }}>
+                ACTIVE PREDICTION
               </p>
-              <p className="text-[10px] text-[rgba(224,224,224,0.5)]">
+              <p className="font-vt text-lg" style={{ color: 'rgba(232,224,208,0.55)' }}>
                 {activeBet.status === 'pending' ? 'Pending confirmation...' : 'Confirmed on-chain'}
               </p>
-              <div className="mt-2 grid grid-cols-1 gap-1.5 text-[10px] sm:grid-cols-3">
-                <p>
-                  <span className="text-[rgba(224,224,224,0.4)]">Amount: </span>
-                  <span className="text-[rgba(224,224,224,0.75)]">{attoToAlph(activeBet.amount, 2)} ALPH</span>
+              <div className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-3">
+                <p className="font-vt text-lg">
+                  <span style={{ color: 'var(--text-dim)' }}>Amount: </span>
+                  <span style={{ color: 'rgba(232,224,208,0.75)' }}>{attoToAlph(activeBet.amount, 2)} ALPH</span>
                 </p>
-                <p>
-                  <span className="text-[rgba(224,224,224,0.4)]">Target: </span>
-                  <span className="font-mono text-[rgba(224,224,224,0.75)]">
+                <p className="font-vt text-lg">
+                  <span style={{ color: 'var(--text-dim)' }}>Target: </span>
+                  <span className="font-mono" style={{ color: 'rgba(232,224,208,0.75)', fontSize: '0.7rem' }}>
                     {formatAddressWithYou(activeBet.target, walletAddress)}
                   </span>
                 </p>
-                <p>
-                  <span className="text-[rgba(224,224,224,0.4)]">Est. payout: </span>
-                  <span className="text-[rgba(212,175,55,0.8)]">{attoToAlph(activeBetQuote, 2)} ALPH</span>
+                <p className="font-vt text-lg">
+                  <span style={{ color: 'var(--text-dim)' }}>Est. payout: </span>
+                  <span className="crt-gold">{attoToAlph(activeBetQuote, 2)} ALPH</span>
                 </p>
               </div>
-              <p className="mt-2 text-[9px] italic text-[rgba(224,224,224,0.25)]">
+              <p className="font-vt mt-2 text-lg italic" style={{ color: 'rgba(232,224,208,0.25)' }}>
                 Refreshes every 15s
               </p>
             </div>
@@ -372,79 +358,68 @@ export function BettingPage({
             <button
               onClick={placeBet}
               disabled={!canPlaceBet || isSameAsExistingBet || isBusy || isBettingWindowClosed}
-              className="btn-magma"
+              className="btn-pixel-red"
             >
               {placingBet
-                ? 'Submitting...'
+                ? 'SUBMITTING...'
                 : isBettingWindowClosed
-                  ? 'Prediction Closed'
+                  ? 'PREDICTION CLOSED'
                   : isSameAsExistingBet
-                    ? 'Prediction Unchanged'
+                    ? 'PREDICTION UNCHANGED'
                     : hasMyBet
-                      ? 'Update Prediction'
-                      : 'Place Prediction'}
+                      ? 'UPDATE PREDICTION'
+                      : 'PLACE PREDICTION'}
             </button>
           </div>
 
           {/* Finalize CTA */}
           {showFinalizeRoundCta && finalizeCtaRoundId > 0n && (
-            <div
-              className="mt-4 border border-[rgba(224,224,224,0.08)] bg-[rgba(224,224,224,0.02)] px-4 py-4"
-              style={{ clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)' }}
-            >
-              <p className="mb-2 text-[10px] text-[rgba(224,224,224,0.45)]">
+            <div className="pixel-panel mt-4 px-4 py-4">
+              <p className="font-vt mb-2 text-lg" style={{ color: 'rgba(232,224,208,0.45)' }}>
                 Anyone can finalize an ended round. Small gas fee required.
               </p>
               <button
                 onClick={() => finalizeBettingRound(finalizeCtaRoundId)}
                 disabled={finalizingBetRound || isBusy}
-                className="btn-stone"
-                style={{ width: '100%' }}
+                className="btn-pixel-ghost"
               >
-                {finalizingBetRound ? 'Finalizing...' : `Finalize Round #${finalizeCtaRoundId.toString()}`}
+                {finalizingBetRound ? 'FINALIZING...' : `FINALIZE ROUND #${finalizeCtaRoundId.toString()}`}
               </button>
             </div>
           )}
 
           {/* Last Settled Round */}
           {lastSettledRoundId > 0n && isLastSettledRoundFinalized && hasMyLastSettledBet && myLastSettledBetTarget && (
-            <div
-              className={`mt-4 border px-4 py-4 ${
-                didWinLastSettledRound
-                  ? 'border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.04)]'
-                  : 'border-[rgba(224,224,224,0.08)] bg-[rgba(224,224,224,0.02)]'
-              }`}
-              style={{ clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)' }}
-            >
-              <p className="mb-2 text-[8px] tracking-[0.28em] uppercase text-[rgba(224,224,224,0.38)]">
-                Last Settled · Round #{lastSettledRoundId.toString()}
+            <div className={`mt-4 px-4 py-4 ${didWinLastSettledRound ? 'pixel-panel-gold' : 'pixel-panel'}`}>
+              <p className="font-pixel mb-2" style={{ fontSize: '0.3rem', letterSpacing: '0.18em', color: 'var(--text-dim)' }}>
+                LAST SETTLED · ROUND #{lastSettledRoundId.toString()}
               </p>
-              <p className="text-[10px] text-[rgba(224,224,224,0.6)]">
+              <p className="font-vt text-lg" style={{ color: 'rgba(232,224,208,0.65)' }}>
                 Backed {formatAddressWithYou(myLastSettledBetTarget, walletAddress)} with{' '}
                 {attoToAlph(myLastSettledBetAmount, 2)} ALPH
               </p>
               {didWinLastSettledRound ? (
                 <>
-                  <p className="mt-1.5 text-[10px] text-[rgba(224,224,224,0.7)]">
+                  <p className="font-vt mt-1.5 text-lg" style={{ color: 'rgba(232,224,208,0.75)' }}>
                     Your pick won. Claimable:{' '}
-                    <span className="font-semibold text-[#D4AF37]">{attoToAlph(claimablePayout, 2)} ALPH</span>
+                    <span className="font-semibold crt-gold">{attoToAlph(claimablePayout, 2)} ALPH</span>
                   </p>
                   {!hasClaimedLastSettledRound ? (
                     <button
                       onClick={() => claimBet(lastSettledRoundId)}
                       disabled={isBusy}
-                      className="btn-gold mt-3"
+                      className="btn-pixel-gold mt-3"
                     >
-                      {claimingBet ? 'Claiming...' : 'Claim Winnings'}
+                      {claimingBet ? 'CLAIMING...' : 'CLAIM SPOILS'}
                     </button>
                   ) : (
-                    <p className="mt-2 text-[10px] text-[rgba(224,224,224,0.4)]">
+                    <p className="font-vt mt-2 text-lg" style={{ color: 'var(--text-dim)' }}>
                       Claimed: {attoToAlph(lastSettledHistory?.payout ?? 0n, 2)} ALPH
                     </p>
                   )}
                 </>
               ) : (
-                <p className="mt-1.5 text-[10px] text-[rgba(224,224,224,0.38)]">
+                <p className="font-vt mt-1.5 text-lg" style={{ color: 'rgba(232,224,208,0.4)' }}>
                   Winner: {lastSettledWinner ? formatAddressWithYou(lastSettledWinner, walletAddress) : '—'} · You did not win
                 </p>
               )}
@@ -456,34 +431,34 @@ export function BettingPage({
         <div className="space-y-4">
 
           {/* Pool Stats */}
-          <div className="tectonic-plate px-5 py-5 sm:px-7">
-            <p className="mb-4 text-[9px] tracking-[0.28em] uppercase text-[rgba(224,224,224,0.35)]">
-              Prediction Pool
+          <div className="pixel-box px-5 py-5 sm:px-7">
+            <p className="font-pixel mb-4" style={{ fontSize: '0.36rem', letterSpacing: '0.2em', color: 'var(--text-dim)' }}>
+              PREDICTION POOL
             </p>
             <div className="grid grid-cols-2 gap-3">
-              <div className="tectonic-panel px-4 py-4 text-center">
-                <p className="text-[8px] tracking-wider uppercase text-[rgba(224,224,224,0.35)]">Total Pool</p>
-                <p className="mt-1.5 font-cinzel text-xl font-semibold text-[#D4AF37] engraved tabular-nums">
+              <div className="pixel-panel px-4 py-4 text-center">
+                <p className="font-pixel" style={{ fontSize: '0.3rem', letterSpacing: '0.15em', color: 'var(--text-dim)' }}>TOTAL POOL</p>
+                <p className="font-vt mt-1.5 tabular-nums crt-gold" style={{ fontSize: '2rem' }}>
                   {attoToAlph(totalBettingPool, 2)}
                 </p>
-                <p className="text-[9px] text-[rgba(224,224,224,0.38)]">ALPH</p>
+                <p className="font-pixel" style={{ fontSize: '0.28rem', color: 'var(--text-dim)' }}>ALPH</p>
                 {formatUsd(totalBettingPool) && (
-                  <p className="mt-1 text-[9px] text-[rgba(224,224,224,0.28)]">{formatUsd(totalBettingPool)}</p>
+                  <p className="font-vt mt-1 text-lg" style={{ color: 'rgba(232,224,208,0.28)' }}>{formatUsd(totalBettingPool)}</p>
                 )}
               </div>
-              <div className="tectonic-panel px-4 py-4 text-center">
-                <p className="text-[8px] tracking-wider uppercase text-[rgba(224,224,224,0.35)]">Favourite</p>
+              <div className="pixel-panel px-4 py-4 text-center">
+                <p className="font-pixel" style={{ fontSize: '0.3rem', letterSpacing: '0.15em', color: 'var(--text-dim)' }}>FAVOURITE</p>
                 {topBetPlayer ? (
                   <>
-                    <p className="mt-1.5 font-mono text-[10px] text-[rgba(224,224,224,0.7)] break-all">
+                    <p className="font-mono mt-1.5 break-all" style={{ fontSize: '0.65rem', color: 'rgba(232,224,208,0.7)' }}>
                       {formatAddressWithYou(topBetPlayer.address, walletAddress)}
                     </p>
-                    <p className="mt-1 text-[9px] text-[#D4AF37]">
+                    <p className="font-vt mt-1 text-lg crt-gold">
                       {attoToAlph(topBetPlayer.amount, 2)} ALPH · {totalBettingPool > 0n ? Math.round(Number(topBetPlayer.amount * 100n / totalBettingPool)) : 0}%
                     </p>
                   </>
                 ) : (
-                  <p className="mt-1.5 text-[10px] text-[rgba(224,224,224,0.3)]">No predictions yet</p>
+                  <p className="font-vt mt-1.5 text-lg" style={{ color: 'var(--text-dim)' }}>No predictions yet</p>
                 )}
               </div>
             </div>
@@ -491,16 +466,17 @@ export function BettingPage({
 
           {/* Odds Table */}
           {bettingByPlayer.size > 0 && (
-            <div className="tectonic-plate px-5 py-5 sm:px-7">
-              <p className="mb-3 text-[9px] tracking-[0.28em] uppercase text-[rgba(224,224,224,0.35)]">
-                Live Odds
+            <div className="pixel-box px-5 py-5 sm:px-7">
+              <p className="font-pixel mb-3" style={{ fontSize: '0.36rem', letterSpacing: '0.2em', color: 'var(--text-dim)' }}>
+                LIVE ODDS
               </p>
-              <div className="overflow-hidden" style={{ clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%)' }}>
-                <div className="grid grid-cols-[1fr_auto_auto_auto] gap-x-3 border-b border-[rgba(224,224,224,0.06)] px-3 py-2 text-[8px] tracking-[0.2em] uppercase text-[rgba(224,224,224,0.3)]">
-                  <span>Player</span>
-                  <span className="text-right">Pool</span>
-                  <span className="text-right">Share</span>
-                  <span className="text-right">Odds</span>
+              <div className="overflow-hidden">
+                <div className="grid grid-cols-[1fr_auto_auto_auto] gap-x-3 border-b px-3 py-2" style={{ borderColor: 'var(--border-dim)' }}>
+                  {['PLAYER', 'POOL', 'SHARE', 'ODDS'].map((h) => (
+                    <span key={h} className="font-pixel" style={{ fontSize: '0.28rem', letterSpacing: '0.15em', color: 'var(--text-dim)', textAlign: h !== 'PLAYER' ? 'right' : 'left' }}>
+                      {h}
+                    </span>
+                  ))}
                 </div>
                 {[...bettingByPlayer.entries()]
                   .sort((a, b) => Number(b[1] - a[1]))
@@ -511,48 +487,51 @@ export function BettingPage({
                     return (
                       <div
                         key={player}
-                        className={`grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-3 border-b border-[rgba(224,224,224,0.04)] px-3 py-2.5 last:border-b-0 ${
-                          isSelected ? 'bg-[rgba(255,72,0,0.05)]' : ''
-                        }`}
+                        className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-3 border-b px-3 py-2.5 last:border-b-0"
+                        style={{
+                          borderColor: 'var(--border-dim)',
+                          background: isSelected ? 'rgba(255,50,0,0.05)' : undefined,
+                        }}
                       >
                         <div className="flex min-w-0 items-center gap-2">
-                          <div className="h-1 w-12 flex-shrink-0 overflow-hidden bg-[rgba(224,224,224,0.08)]">
-                            <div
-                              className="h-full bg-[rgba(212,175,55,0.6)]"
-                              style={{ width: `${percentage}%` }}
-                            />
+                          {/* Pixel progress bar */}
+                          <div
+                            className="flex-shrink-0 overflow-hidden"
+                            style={{ width: 40, height: 6, border: '1px solid rgba(255,255,255,0.15)', background: 'var(--panel)', boxShadow: '1px 1px 0 #000' }}
+                          >
+                            <div style={{ width: `${percentage}%`, height: '100%', background: 'var(--gold)' }} />
                           </div>
-                          <span className="truncate font-mono text-[10px] text-[rgba(224,224,224,0.65)]">
+                          <span className="truncate font-mono" style={{ fontSize: '0.65rem', color: 'rgba(232,224,208,0.65)' }}>
                             {formatAddressWithYou(player, walletAddress)}
                           </span>
                         </div>
-                        <span className="min-w-[50px] text-right font-mono text-[10px] tabular-nums text-[rgba(224,224,224,0.55)]">
+                        <span className="font-mono tabular-nums" style={{ minWidth: 50, textAlign: 'right', fontSize: '0.65rem', color: 'rgba(232,224,208,0.55)' }}>
                           {attoToAlph(amount, 2)}
                         </span>
-                        <span className="min-w-[32px] text-right font-mono text-[10px] tabular-nums text-[rgba(224,224,224,0.38)]">
+                        <span className="font-mono tabular-nums" style={{ minWidth: 32, textAlign: 'right', fontSize: '0.65rem', color: 'rgba(232,224,208,0.4)' }}>
                           {percentage}%
                         </span>
-                        <span className="min-w-[38px] text-right font-mono text-[10px] font-semibold tabular-nums text-[#D4AF37]">
+                        <span className="font-vt tabular-nums font-semibold crt-gold" style={{ minWidth: 38, textAlign: 'right', fontSize: '1.1rem' }}>
                           {odds.toFixed(2)}x
                         </span>
                       </div>
                     )
                   })}
               </div>
-              <p className="mt-2 text-center text-[8px] italic text-[rgba(224,224,224,0.2)]">
+              <p className="font-vt mt-2 text-center text-lg italic" style={{ color: 'rgba(232,224,208,0.22)' }}>
                 Multiplier if player wins
               </p>
             </div>
           )}
 
           {/* History */}
-          <div className="tectonic-plate px-5 py-5 sm:px-7">
-            <p className="mb-3 text-[9px] tracking-[0.28em] uppercase text-[rgba(224,224,224,0.35)]">
-              My Last 10 Rounds
+          <div className="pixel-box px-5 py-5 sm:px-7">
+            <p className="font-pixel mb-3" style={{ fontSize: '0.36rem', letterSpacing: '0.2em', color: 'var(--text-dim)' }}>
+              MY LAST 10 ROUNDS
             </p>
             <div className="max-h-64 space-y-2 overflow-auto">
               {myBetHistory.length === 0 ? (
-                <p className="text-[10px] text-[rgba(224,224,224,0.28)]">No predictions yet from this wallet</p>
+                <p className="font-vt text-xl" style={{ color: 'rgba(232,224,208,0.3)' }}>No predictions yet from this wallet</p>
               ) : (
                 myBetHistory.map((item) => {
                   const isWin = item.finalized && item.winner && stripAddressGroup(item.winner) === stripAddressGroup(item.target)
@@ -560,20 +539,13 @@ export function BettingPage({
                   return (
                     <div
                       key={item.roundId.toString()}
-                      className={`border px-3 py-2.5 ${
-                        isWin
-                          ? 'border-[rgba(212,175,55,0.25)] bg-[rgba(212,175,55,0.04)]'
-                          : isLoss
-                            ? 'border-[rgba(255,72,0,0.15)] bg-[rgba(255,72,0,0.03)]'
-                            : 'border-[rgba(224,224,224,0.07)] bg-[rgba(224,224,224,0.02)]'
-                      }`}
-                      style={{ clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)' }}
+                      className={isWin ? 'pixel-panel-gold px-3 py-2.5' : isLoss ? 'pixel-panel-red px-3 py-2.5' : 'pixel-panel px-3 py-2.5'}
                     >
-                      <p className="text-[10px] text-[rgba(224,224,224,0.65)]">
+                      <p className="font-vt text-lg" style={{ color: 'rgba(232,224,208,0.65)' }}>
                         Round #{item.roundId.toString()} · {attoToAlph(item.amount, 2)} ALPH on{' '}
                         {formatAddressWithYou(item.target, walletAddress)}
                       </p>
-                      <p className="mt-0.5 text-[9px] text-[rgba(224,224,224,0.38)]">
+                      <p className="font-vt mt-0.5 text-lg" style={{ color: 'rgba(232,224,208,0.4)' }}>
                         {item.finalized
                           ? `${isWin ? 'Won' : 'Lost'} · Winner: ${item.winner ? formatAddressWithYou(item.winner, walletAddress) : '—'}`
                           : 'Not finalized yet'}
@@ -583,16 +555,16 @@ export function BettingPage({
                         <button
                           onClick={() => finalizeBettingRound(item.roundId)}
                           disabled={item.finalized || isBusy || (item.roundId === lastSettledRoundId && isRoundActive && !isExpired)}
-                          className="btn-stone-sm"
+                          className="btn-pixel-ghost-sm"
                         >
-                          {item.roundId === lastSettledRoundId && isRoundActive && !isExpired ? 'Running' : item.finalized ? 'Done' : 'Finalize'}
+                          {item.roundId === lastSettledRoundId && isRoundActive && !isExpired ? 'RUNNING' : item.finalized ? 'DONE' : 'FINALIZE'}
                         </button>
                         <button
                           onClick={() => claimBet(item.roundId)}
                           disabled={!item.finalized || item.claimed || isBusy}
-                          className="btn-gold-sm"
+                          className="btn-pixel-gold-sm"
                         >
-                          Claim
+                          CLAIM
                         </button>
                       </div>
                     </div>
